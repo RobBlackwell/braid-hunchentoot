@@ -9,10 +9,18 @@
 		     :headers (hunchentoot:headers-in request)
 		     :body (hunchentoot:raw-post-data :request request)))
 
+(defun ensure-integer (x)
+	""
+	(if (stringp x)
+			(parse-integer x)
+			x))
+
 (defun braid-response-to-hunchentoot-reply (response reply)
   "Converts a braid response object to a hunchentoot reply object."
   (loop for (name . value) in (message-headers response) do
-       (setf (hunchentoot:header-out name hunchentoot:reply reply) value))
+			 (if (eq name :content-length)
+					 (setf (hunchentoot:header-out name reply) (ensure-integer value))
+					 (setf (hunchentoot:header-out name reply) value)))
   (setf (hunchentoot:return-code reply) (response-status-code response))
   (message-body response))
 
