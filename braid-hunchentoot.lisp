@@ -34,8 +34,10 @@
 	h)))
 
 (defmethod hunchentoot:acceptor-dispatch-request ((acceptor braid-acceptor) request)
-  (let ((response (funcall (handler acceptor) 
-			   (hunchentoot-request-to-braid-request request))))
+  (let ((response
+				 (braid:coerce-response
+					(funcall (handler acceptor) 
+									 (hunchentoot-request-to-braid-request request)))))
     (braid-response-to-hunchentoot-reply response hunchentoot:*reply*)))
   
 (defvar *default-acceptor* nil)
