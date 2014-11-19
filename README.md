@@ -21,5 +21,5 @@ Quicklisp yet. That doesnt stop you trying it with quicklisp by using
 [local-projects](http://www.quicklisp.org/beta/faq.html).
 
 Rob Blackwell    
-January 2014
+November 2014
 
