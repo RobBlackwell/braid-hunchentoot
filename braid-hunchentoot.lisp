@@ -26,7 +26,7 @@
   (body response))
 
 (defclass braid-acceptor (hunchentoot:easy-acceptor)
-  ((handler :initarg :handler)))
+  ((request-handler :initarg :request-handler :accessor request-handler)))
 
 (defmethod handler ((self braid-acceptor))
   (let ((h (slot-value self 'handler)))
@@ -36,15 +36,15 @@
 
 (defmethod hunchentoot:acceptor-dispatch-request ((acceptor braid-acceptor) request)
   (let ((response
-					(funcall (handler acceptor) 
+					(funcall (request-handler acceptor) 
 									 (hunchentoot-request-to-braid-request request))))
     (braid-response-to-hunchentoot-reply response hunchentoot:*reply*)))
   
 (defvar *default-acceptor* nil)
 
-(defun run-hunchentoot (handler &key (port 8080))
+(defun run-hunchentoot (request-handler &key (port 8080))
   "Runs a Hunchentoot web server to serve the given handler."
-  (setf *default-acceptor* (make-instance 'braid-acceptor :handler handler :port port))
+  (setf *default-acceptor* (make-instance 'braid-acceptor :request-handler request-handler :port port))
   (hunchentoot:start *default-acceptor*))
 
 (defun stop-hunchentoot (&optional (acceptor *default-acceptor*))

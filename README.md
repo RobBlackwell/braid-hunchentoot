@@ -9,9 +9,9 @@ See
 
 	(ql:quickload "braid-hunchentoot")
 
-	(defun my-handler (request) (braid:make-response :body "Hello World"))
+	(defun my-request-handler (request) (braid:make-response :body "Hello World"))
 
-	(braid-hunchentoot:run-hunchentoot 'my-handler)
+	(braid-hunchentoot:run-hunchentoot 'my-request-handler)
 
 	;; Now browse to 8080
 	
