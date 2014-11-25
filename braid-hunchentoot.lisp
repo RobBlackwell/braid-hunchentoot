@@ -36,8 +36,8 @@
 
 (defun sanitise-response (response)
 	""
-	(braid-middleware:realise-body
-	 (braid-middleware:realise-response response)))
+	(braid:load-pathname-body
+	 (braid:ensure-response response)))
 
 (defmethod hunchentoot:acceptor-dispatch-request ((acceptor braid-acceptor) request)
   (let ((response
