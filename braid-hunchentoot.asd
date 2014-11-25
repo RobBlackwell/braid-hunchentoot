@@ -8,6 +8,7 @@
   :serial t
   :depends-on (#:alexandria 
 							 #:hunchentoot
-							 #:braid)
+							 #:braid
+							 #:braid-middleware)
   :components ((:file "package")
 							 (:file "braid-hunchentoot")))

@@ -28,16 +28,22 @@
 (defclass braid-acceptor (hunchentoot:easy-acceptor)
   ((request-handler :initarg :request-handler :accessor request-handler)))
 
-(defmethod handler ((self braid-acceptor))
-  (let ((h (slot-value self 'handler)))
-    (if (symbolp h)
-	(symbol-function h)
-	h)))
+;; (defmethod handler ((self braid-acceptor))
+;;   (let ((h (slot-value self 'handler)))
+;;     (if (symbolp h)
+;; 	(symbol-function h)
+;; 	h)))
+
+(defun sanitise-response (response)
+	""
+	(braid-middleware:realise-body
+	 (braid-middleware:realise-response response)))
 
 (defmethod hunchentoot:acceptor-dispatch-request ((acceptor braid-acceptor) request)
   (let ((response
+				 (sanitise-response
 					(funcall (request-handler acceptor) 
-									 (hunchentoot-request-to-braid-request request))))
+									 (hunchentoot-request-to-braid-request request)))))
     (braid-response-to-hunchentoot-reply response hunchentoot:*reply*)))
   
 (defvar *default-acceptor* nil)
