@@ -4,9 +4,9 @@
 
 (defun hunchentoot-request-to-braid-request (request)
   "Converts a hunchentoot request object to a braid request."
-  (braid:make-request
+  (braid:make-http-request
 	 :uri (hunchentoot:request-uri request) 
-	 :request-method (hunchentoot:request-method request) 
+	 :method (hunchentoot:request-method request) 
 	 :headers (alist-plist (hunchentoot:headers-in request))
 	 :body (hunchentoot:raw-post-data :request request)))
 
@@ -18,12 +18,12 @@
 
 (defun braid-response-to-hunchentoot-reply (response reply)
   "Converts a braid response object to a hunchentoot reply object."
-	(loop for (name value) on (headers response) by #'cddr do 
+	(loop for (name value) on (http-response-headers response) by #'cddr do 
 			 (if (eq name :content-length)
 					 (setf (hunchentoot:header-out name reply) (ensure-integer value))
 					 (setf (hunchentoot:header-out name reply) value)))
-  (setf (hunchentoot:return-code reply) (status response))
-  (body response))
+  (setf (hunchentoot:return-code reply) (http-response-status response))
+  (http-response-body response))
 
 (defclass braid-acceptor (hunchentoot:easy-acceptor)
   ((request-handler :initarg :request-handler :accessor request-handler)))
