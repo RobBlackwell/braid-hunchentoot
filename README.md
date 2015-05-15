@@ -9,7 +9,7 @@ See
 
 	(ql:quickload "braid-hunchentoot")
 
-	(defun my-request-handler (request) (braid:make-response :body "Hello World"))
+	(defun my-request-handler (request) (braid:make-http-response :body "Hello World"))
 
 	(braid-hunchentoot:run-hunchentoot 'my-request-handler)
 
